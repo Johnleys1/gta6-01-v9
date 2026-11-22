@@ -41,7 +41,7 @@ export const MISSIONS = [
   { id: 1, name: 'Golden Getaway', giver: 'MARA', pay: 400,
     brief: 'Voss men torched your garage. Steal a car on The Strand and lose the heat at the pier.',
     steps: [
-      { type: 'drive', at: [-430, 120], text: 'Steal a car on The Strand (E near a car)' },
+      { type: 'enterCar', text: 'Steal a car on The Strand (E near a car)' },
       { type: 'drive', at: [-380, -260], text: 'Lose the cops — reach the north pier marker', wanted: 2 },
     ] },
   { id: 2, name: 'Marina Heist', giver: 'DEX', pay: 700,
