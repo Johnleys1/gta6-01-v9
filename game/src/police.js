@@ -112,7 +112,9 @@ export class PoliceSystem {
       while (dh > Math.PI) dh -= Math.PI * 2;
       while (dh < -Math.PI) dh += Math.PI * 2;
       car.heading += Math.max(-2.2 * dt, Math.min(2.2 * dt, dh));
-      const target = Math.min(TUNE.policeSpeed, 18 + this.wanted * 6);
+      // Pull up and stop beside an on-foot player instead of ramming through:
+      // the bust only lands once the car has actually stopped next to them.
+      const target = (onFoot && d < 6) ? 0 : Math.min(TUNE.policeSpeed, 18 + this.wanted * 6);
       car.speed += (target - car.speed) * Math.min(1, dt * 1.2);
       const nx = car.x + Math.sin(car.heading) * car.speed * dt;
       const nz = car.z + Math.cos(car.heading) * car.speed * dt;
@@ -148,9 +150,9 @@ export class PoliceSystem {
     return { rammed: this.cars.some((c) => Math.hypot(c.x - playerPos.x, c.z - playerPos.z) < 3.2) };
   }
 
-  /** Bust check: a patrol car touching the player on foot at low speed. */
+  /** Bust check: a patrol car that has pulled up and STOPPED next to the player on foot. */
   bustCheck(playerPos, onFoot) {
     if (!onFoot || this.wanted === 0) return false;
-    return this.cars.some((c) => Math.hypot(c.x - playerPos.x, c.z - playerPos.z) < TUNE.bustRadius);
+    return this.cars.some((c) => c.speed < 4 && Math.hypot(c.x - playerPos.x, c.z - playerPos.z) < TUNE.bustRadius);
   }
 }
