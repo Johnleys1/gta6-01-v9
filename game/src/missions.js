@@ -115,6 +115,9 @@ export class MissionSystem {
     const d = (at) => Math.hypot(playerPos.x - at[0], playerPos.z - at[1]);
     if (s.type === 'drive') {
       if (d(s.at) < 7) { this.audio.pickup(); this.nextStep(); }
+    } else if (s.type === 'enterCar') {
+      // Get in any car — the step only counts once the player is driving.
+      if (inCar) { this.audio.pickup(); this.nextStep(); }
     } else if (s.type === 'kill') {
       if (this.kills >= this.killTarget) { this.audio.pickup(); this.nextStep(); }
     } else if (s.type === 'race') {
